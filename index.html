@@ -1,0 +1,689 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>RepairOS — Shop Management System</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link href="https://fonts.googleapis.com/css2?family=Clash+Display:wght@400;500;600;700&family=Cabinet+Grotesk:wght@400;500;700;800&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <!-- Fallback fonts if Clash Display not available -->
+  <link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fira+Code:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="src/styles/main.css"/>
+</head>
+<body>
+<div id="app">
+
+  <!-- ============================================================
+       LOGIN PAGE
+  ============================================================ -->
+  <div id="page-login" class="page active">
+    <div class="login-scene">
+      <div class="scene-lines"></div>
+      <div class="scene-orb orb-1"></div>
+      <div class="scene-orb orb-2"></div>
+      <div class="scene-orb orb-3"></div>
+      <canvas id="particle-canvas"></canvas>
+    </div>
+
+    <div class="login-wrap">
+      <!-- Brand -->
+      <div class="login-logo">
+        <div class="logo-mark">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect width="48" height="48" rx="14" fill="url(#lg1)"/>
+            <path d="M10 24h7l5-10 5 20 5-14 3 4h8" stroke="#fff" stroke-width="3" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs>
+              <linearGradient id="lg1" x1="0" y1="0" x2="48" y2="48">
+                <stop stop-color="#FF4500"/>
+                <stop offset="1" stop-color="#FF8C00"/>
+              </linearGradient>
+            </defs>
+          </svg>
+        </div>
+        <div class="logo-text">
+          <span class="logo-main">RepairOS</span>
+          <span class="logo-sub">Shop Management System</span>
+        </div>
+      </div>
+
+      <div class="login-card">
+        <div class="login-card-glow"></div>
+
+        <h1 class="login-heading">Sign In</h1>
+        <p class="login-desc">Choose your role and enter credentials to continue</p>
+
+        <!-- Role selector -->
+        <div class="role-selector">
+          <button class="role-tile active" data-role="admin" onclick="selectRole(this,'admin')">
+            <div class="role-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+                <path d="M19 8l2 2-2 2M21 10h-4" stroke-width="1.5"/>
+              </svg>
+            </div>
+            <span class="role-tile-name">Admin</span>
+            <span class="role-tile-desc">Full access</span>
+          </button>
+          <button class="role-tile" data-role="reception" onclick="selectRole(this,'reception')">
+            <div class="role-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <rect x="3" y="4" width="18" height="16" rx="2"/>
+                <path d="M8 4v4M16 4v4M3 10h18M8 14h2M14 14h2M8 17h2M14 17h2"/>
+              </svg>
+            </div>
+            <span class="role-tile-name">Receptionist</span>
+            <span class="role-tile-desc">Front desk</span>
+          </button>
+          <button class="role-tile" data-role="technician" onclick="selectRole(this,'technician')">
+            <div class="role-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3-3a6 6 0 01-7.5 7.5l-7.5 7.5a2.1 2.1 0 01-3-3l7.5-7.5A6 6 0 0114.7 6.3z"/>
+              </svg>
+            </div>
+            <span class="role-tile-name">Technician</span>
+            <span class="role-tile-desc">Repair work</span>
+          </button>
+          <button class="role-tile" data-role="customer" onclick="selectRole(this,'customer')">
+            <div class="role-tile-icon">
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8">
+                <circle cx="12" cy="8" r="4"/>
+                <path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+              </svg>
+            </div>
+            <span class="role-tile-name">Customer</span>
+            <span class="role-tile-desc">Track repairs</span>
+          </button>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Email / Username</label>
+          <div class="field-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" width="16" height="16">
+                <path d="M2.5 5.5A2 2 0 014.5 3.5h11a2 2 0 012 2v9a2 2 0 01-2 2h-11a2 2 0 01-2-2v-9z"/>
+                <path d="M2.5 5.5l7.5 5 7.5-5"/>
+              </svg>
+            </span>
+            <input type="text" id="login-user" placeholder="Enter your email" class="field-input" value="admin@repairshop.com"/>
+          </div>
+        </div>
+
+        <div class="field-group">
+          <label class="field-label">Password</label>
+          <div class="field-wrap">
+            <span class="field-icon">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.6" width="16" height="16">
+                <rect x="3" y="9" width="14" height="10" rx="2"/>
+                <path d="M7 9V6a3 3 0 016 0v3"/>
+              </svg>
+            </span>
+            <input type="password" id="login-pass" placeholder="Enter your password" class="field-input" value="password"/>
+          </div>
+        </div>
+
+        <div class="login-extras">
+          <label class="check-row"><input type="checkbox" checked class="check-input"/> Remember me</label>
+          <a href="#" class="link-sm">Forgot password?</a>
+        </div>
+
+        <button class="btn-signin" onclick="doLogin()">
+          <span>Sign In</span>
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="18" height="18">
+            <path d="M4 10h12M11 5l5 5-5 5"/>
+          </svg>
+        </button>
+
+        <div class="demo-hint">
+          <span class="demo-dot"></span>
+          Demo mode: any credentials work — role selection controls access
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       STAFF APP SHELL (Admin / Reception / Technician)
+  ============================================================ -->
+  <div id="page-app" class="page">
+    <aside class="sidebar" id="sidebar">
+      <div class="sb-brand">
+        <div class="sb-logo">
+          <svg viewBox="0 0 48 48" fill="none">
+            <rect width="48" height="48" rx="12" fill="url(#lg2)"/>
+            <path d="M10 24h7l5-10 5 20 5-14 3 4h8" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+            <defs><linearGradient id="lg2" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#FF4500"/><stop offset="1" stop-color="#FF8C00"/></linearGradient></defs>
+          </svg>
+        </div>
+        <div>
+          <div class="sb-name">RepairOS</div>
+          <div class="sb-ver">v2.0 — SDLC Phase 3</div>
+        </div>
+      </div>
+
+      <div class="sb-user-card" id="sb-user-card">
+        <div class="sb-avatar" id="sb-avatar">A</div>
+        <div class="sb-user-info">
+          <div class="sb-user-name" id="sb-user-name">Admin</div>
+          <div class="sb-user-role" id="sb-user-role">Administrator</div>
+        </div>
+        <button class="sb-logout" onclick="doLogout()" title="Sign out">
+          <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16">
+            <path d="M7 3H4a1 1 0 00-1 1v12a1 1 0 001 1h3M13 15l4-5-4-5M17 10H7"/>
+          </svg>
+        </button>
+      </div>
+
+      <nav class="sb-nav">
+        <div class="sb-nav-label">Main</div>
+        <a href="#" class="sb-link active" data-page="dashboard" data-roles="admin,reception,technician" onclick="return navTo('dashboard',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="2" width="7" height="7" rx="1.5"/><rect x="11" y="2" width="7" height="7" rx="1.5"/><rect x="2" y="11" width="7" height="7" rx="1.5"/><rect x="11" y="11" width="7" height="7" rx="1.5"/></svg>
+          <span>Dashboard</span>
+        </a>
+        <a href="#" class="sb-link" data-page="customers" data-roles="admin,reception" onclick="return navTo('customers',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="8" cy="6" r="3"/><path d="M2 17c0-3.3 2.7-6 6-6M13 13l2 2 3-3"/></svg>
+          <span>Customers</span>
+        </a>
+        <a href="#" class="sb-link" data-page="tickets" data-roles="admin,reception,technician" onclick="return navTo('tickets',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="3" y="3" width="14" height="14" rx="2"/><path d="M7 8h6M7 11h4"/></svg>
+          <span>Repair Tickets</span>
+        </a>
+        <a href="#" class="sb-link" data-page="history" data-roles="admin,reception,technician" onclick="return navTo('history',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="10" cy="10" r="7"/><path d="M10 6v4l3 2"/></svg>
+          <span>Service History</span>
+        </a>
+        <a href="#" class="sb-link" data-page="payments" data-roles="admin,reception" onclick="return navTo('payments',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><rect x="2" y="5" width="16" height="12" rx="2"/><path d="M2 9h16M6 13h2M10 13h4"/></svg>
+          <span>Payments</span>
+        </a>
+        <div class="sb-nav-label sb-admin-only" data-roles="admin">Management</div>
+        <a href="#" class="sb-link sb-admin-only" data-page="users" data-roles="admin" onclick="return navTo('users',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><circle cx="6" cy="7" r="3"/><circle cx="14" cy="7" r="3"/><path d="M1 17c0-2.8 2.2-5 5-5M14 12c2.8 0 5 2.2 5 5"/><path d="M10 12v-2M10 17v-2M8 15h4"/></svg>
+          <span>Users & Roles</span>
+        </a>
+        <a href="#" class="sb-link sb-admin-only" data-page="reports" data-roles="admin" onclick="return navTo('reports',this)">
+          <svg class="sb-icon" viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8"><path d="M3 17V9l4-4 4 4 4-8v16"/></svg>
+          <span>Reports & Analytics</span>
+        </a>
+      </nav>
+
+      <div class="sb-footer">
+        <div class="sb-footer-label">ITCD 103 — SDLC Phase 3</div>
+        <div class="sb-footer-label">Adamson University</div>
+      </div>
+    </aside>
+
+    <main class="main" id="main-content">
+
+      <!-- DASHBOARD (role-aware — fully rendered by dashboard.js) -->
+      <section id="sec-dashboard" class="sec active">
+        <!-- Content injected by renderDashboard() based on currentRole -->
+      </section>
+
+      <!-- CUSTOMERS -->
+      <section id="sec-customers" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Customers</h2>
+            <p class="sec-sub">Manage customer records — <span id="cust-count">0</span> total</p>
+          </div>
+          <button class="btn-primary" onclick="openModal('modal-customer')">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 4v12M4 10h12"/></svg>
+            New Customer
+          </button>
+        </div>
+        <div class="card">
+          <div class="search-row">
+            <div class="search-box">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="9" cy="9" r="5"/><path d="M16 16l-3.5-3.5"/></svg>
+              <input type="text" id="cust-search" placeholder="Search by name, phone, or email..." oninput="renderCustomers()"/>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>Customer</th><th>Phone</th><th>Email</th>
+                <th>City</th><th>Tickets</th><th>Date Registered</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="cust-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPAIR TICKETS -->
+      <section id="sec-tickets" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Repair Tickets</h2>
+            <p class="sec-sub">Track all device repairs from intake to completion</p>
+          </div>
+          <button class="btn-primary" id="btn-new-ticket" onclick="openNewTicket()">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 4v12M4 10h12"/></svg>
+            New Ticket
+          </button>
+        </div>
+        <div class="filter-bar">
+          <div class="search-box sm">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="14" height="14"><circle cx="9" cy="9" r="5"/><path d="M16 16l-3.5-3.5"/></svg>
+            <input type="text" id="tkt-search" placeholder="Search tickets..." oninput="renderTickets()"/>
+          </div>
+          <div class="pill-row" id="status-pills">
+            <button class="pill active" onclick="filterStatus('all',this)">All</button>
+            <button class="pill" onclick="filterStatus('Received',this)">Received</button>
+            <button class="pill" onclick="filterStatus('In Progress',this)">In Progress</button>
+            <button class="pill" onclick="filterStatus('Awaiting Parts',this)">Awaiting Parts</button>
+            <button class="pill" onclick="filterStatus('Completed',this)">Completed</button>
+            <button class="pill" onclick="filterStatus('Released',this)">Released</button>
+          </div>
+        </div>
+        <div class="card">
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>Ticket #</th><th>Customer</th><th>Device</th><th>Issue</th>
+                <th>Technician</th><th>Status</th><th>Priority</th><th>Est. Cost</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="tkt-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- SERVICE HISTORY -->
+      <section id="sec-history" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Service History</h2>
+            <p class="sec-sub">Complete log of all repair activities — linked to tbl_service_history</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="search-row">
+            <div class="search-box">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="16" height="16"><circle cx="9" cy="9" r="5"/><path d="M16 16l-3.5-3.5"/></svg>
+              <input type="text" id="hist-search" placeholder="Search service history..." oninput="renderHistory()"/>
+            </div>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>service_id</th><th>ticket_id</th><th>Customer</th><th>technician_id</th>
+                <th>service_date</th><th>description</th><th>parts_used</th><th>cost</th>
+              </tr></thead>
+              <tbody id="hist-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- PAYMENTS -->
+      <section id="sec-payments" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Payments</h2>
+            <p class="sec-sub">Payment records — linked to tbl_payment</p>
+          </div>
+          <button class="btn-primary" onclick="openModal('modal-payment')">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 4v12M4 10h12"/></svg>
+            Record Payment
+          </button>
+        </div>
+        <div class="card">
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>payment_id</th><th>ticket_id</th><th>customer_id</th>
+                <th>amount</th><th>payment_method</th><th>payment_date</th><th>payment_status</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="pay-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- USERS & ROLES -->
+      <section id="sec-users" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Users &amp; Roles</h2>
+            <p class="sec-sub">Role-based access control — Admin, Receptionist, Technician</p>
+          </div>
+          <button class="btn-primary" onclick="openModal('modal-user')">
+            <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16"><path d="M10 4v12M4 10h12"/></svg>
+            Add User
+          </button>
+        </div>
+        <div class="role-perm-grid">
+          <div class="perm-card">
+            <div class="perm-header perm-admin">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><circle cx="10" cy="7" r="4"/><path d="M3 18c0-3.3 3.1-6 7-6s7 2.7 7 6"/><path d="M17 5l2 2-2 2"/></svg>
+              Admin
+            </div>
+            <ul class="perm-list">
+              <li class="perm-yes">Full system access</li>
+              <li class="perm-yes">Manage users & roles</li>
+              <li class="perm-yes">View all reports</li>
+              <li class="perm-yes">Delete any record</li>
+              <li class="perm-yes">Payment management</li>
+            </ul>
+          </div>
+          <div class="perm-card">
+            <div class="perm-header perm-reception">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><rect x="3" y="4" width="14" height="12" rx="2"/><path d="M3 8h14M7 4v4M13 4v4"/></svg>
+              Receptionist
+            </div>
+            <ul class="perm-list">
+              <li class="perm-yes">Create customers</li>
+              <li class="perm-yes">Create & view tickets</li>
+              <li class="perm-yes">Record payments</li>
+              <li class="perm-yes">Customer search</li>
+              <li class="perm-no">No user management</li>
+            </ul>
+          </div>
+          <div class="perm-card">
+            <div class="perm-header perm-tech">
+              <svg viewBox="0 0 20 20" fill="none" stroke="currentColor" stroke-width="1.8" width="18" height="18"><path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3-3a6 6 0 01-7.5 7.5l-7.5 7.5a2.1 2.1 0 01-3-3l7.5-7.5A6 6 0 0114.7 6.3z" transform="scale(0.85) translate(1.5,1.5)"/></svg>
+              Technician
+            </div>
+            <ul class="perm-list">
+              <li class="perm-yes">View assigned tickets</li>
+              <li class="perm-yes">Update ticket status</li>
+              <li class="perm-yes">Add repair notes</li>
+              <li class="perm-yes">View service history</li>
+              <li class="perm-no">No customer create/delete</li>
+            </ul>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><span class="card-title">System Users</span></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>technician_id / user</th><th>Name</th><th>email</th>
+                <th>role</th><th>specialization</th><th>hire_date</th><th>status</th><th>Actions</th>
+              </tr></thead>
+              <tbody id="users-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- REPORTS — Admin only -->
+      <section id="sec-reports" class="sec">
+        <div class="sec-header">
+          <div class="sec-title-wrap">
+            <h2 class="sec-title">Reports &amp; Analytics</h2>
+            <p class="sec-sub">Executive business intelligence — full administrative view</p>
+          </div>
+          <div class="header-actions">
+            <div class="status-pill online"><span class="pulse-dot"></span> Admin Only</div>
+          </div>
+        </div>
+        <div class="reports-grid">
+          <div class="card rpt-card">
+            <div class="card-head"><span class="card-title">Ticket Status Distribution</span><span class="card-badge">Live</span></div>
+            <div id="rpt-status" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card">
+            <div class="card-head"><span class="card-title">Revenue Summary</span></div>
+            <div id="rpt-revenue" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card rpt-full">
+            <div class="card-head"><span class="card-title">Monthly Ticket Volume</span><span class="card-badge">6 Months</span></div>
+            <div id="rpt-monthly" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card rpt-full">
+            <div class="card-head"><span class="card-title">Technician Performance</span><span class="card-badge">Staff</span></div>
+            <div id="rpt-tech" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card">
+            <div class="card-head"><span class="card-title">Device Type Breakdown</span></div>
+            <div id="rpt-device" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card">
+            <div class="card-head"><span class="card-title">Revenue by Payment Method</span></div>
+            <div id="rpt-paymethod" class="rpt-body"></div>
+          </div>
+          <div class="card rpt-card rpt-full">
+            <div class="card-head"><span class="card-title">Ticket Priority Distribution</span></div>
+            <div id="rpt-priority" class="rpt-body"></div>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- ============================================================
+       CUSTOMER PORTAL
+  ============================================================ -->
+  <div id="page-customer" class="page">
+    <div class="cportal">
+      <header class="cportal-header">
+        <div class="cportal-brand">
+          <div class="logo-mark sm">
+            <svg viewBox="0 0 48 48" fill="none">
+              <rect width="48" height="48" rx="12" fill="url(#lg3)"/>
+              <path d="M10 24h7l5-10 5 20 5-14 3 4h8" stroke="#fff" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round"/>
+              <defs><linearGradient id="lg3" x1="0" y1="0" x2="48" y2="48"><stop stop-color="#FF4500"/><stop offset="1" stop-color="#FF8C00"/></linearGradient></defs>
+            </svg>
+          </div>
+          <span class="logo-main">RepairOS</span>
+          <span class="cportal-tag">Customer Portal</span>
+        </div>
+        <div class="cportal-user">
+          <div class="cportal-welcome">Welcome, <strong id="cp-user-name">Customer</strong></div>
+          <button class="btn-ghost-sm" onclick="doLogout()">Sign Out</button>
+        </div>
+      </header>
+
+      <div class="cportal-body">
+        <!-- Customer KPIs -->
+        <div class="cp-kpi-row">
+          <div class="cp-kpi" style="border-top:2px solid var(--accent)">
+            <div class="cp-kpi-val" id="cp-total">0</div>
+            <div class="cp-kpi-label">Total Tickets</div>
+          </div>
+          <div class="cp-kpi cp-active">
+            <div class="cp-kpi-val" id="cp-active">0</div>
+            <div class="cp-kpi-label">Active Repairs</div>
+          </div>
+          <div class="cp-kpi cp-done">
+            <div class="cp-kpi-val" id="cp-done">0</div>
+            <div class="cp-kpi-label">Completed</div>
+          </div>
+        </div>
+
+        <!-- Customer Tickets -->
+        <div class="card cp-card">
+          <div class="card-head">
+            <span class="card-title">My Repair Tickets</span>
+          </div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>Ticket #</th><th>Device</th><th>Issue</th>
+                <th>Status</th><th>Technician</th><th>Est. Cost</th><th>Date</th><th></th>
+              </tr></thead>
+              <tbody id="cp-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Service History for Customer -->
+        <div class="card cp-card">
+          <div class="card-head"><span class="card-title">My Repair History</span></div>
+          <div class="tbl-wrap">
+            <table class="tbl">
+              <thead><tr>
+                <th>Ticket #</th><th>Service Date</th><th>Description</th>
+                <th>Parts Used</th><th>Final Cost</th><th>Notes</th>
+              </tr></thead>
+              <tbody id="cp-hist-tbody"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODALS
+  ============================================================ -->
+  <div class="overlay" id="overlay" onclick="closeModals()"></div>
+
+  <!-- Customer Modal -->
+  <div class="modal" id="modal-customer">
+    <div class="modal-head">
+      <h3 class="modal-title" id="modal-cust-title">New Customer</h3>
+      <button class="modal-x" onclick="closeModals()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-cust-id"/>
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">First Name *</label><input class="field-input" id="c-fname" placeholder="John"/></div>
+        <div class="field-group"><label class="field-label">Last Name *</label><input class="field-input" id="c-lname" placeholder="Smith"/></div>
+      </div>
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">Phone *</label><input class="field-input" id="c-phone" placeholder="(555) 123-4567"/></div>
+        <div class="field-group"><label class="field-label">Email</label><input class="field-input" type="email" id="c-email" placeholder="john@email.com"/></div>
+      </div>
+      <div class="field-group"><label class="field-label">Address</label><input class="field-input" id="c-address" placeholder="123 Rizal Ave"/></div>
+      <div class="field-group"><label class="field-label">City</label><input class="field-input" id="c-city" placeholder="Manila"/></div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="saveCustomer()">Save Customer</button>
+    </div>
+  </div>
+
+  <!-- Ticket Modal -->
+  <div class="modal modal-lg" id="modal-ticket">
+    <div class="modal-head">
+      <h3 class="modal-title" id="modal-tkt-title">New Repair Ticket</h3>
+      <button class="modal-x" onclick="closeModals()">✕</button>
+    </div>
+    <div class="modal-body">
+      <input type="hidden" id="edit-tkt-id"/>
+      <div class="fsec-label">Customer &amp; Technician</div>
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">Customer</label><select class="field-input" id="t-cust"><option value="">Select customer...</option></select></div>
+        <div class="field-group"><label class="field-label">Technician</label><select class="field-input" id="t-tech"><option value="">Unassigned</option></select></div>
+      </div>
+      <div class="fsec-label">Device Information</div>
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">Device Type</label>
+          <select class="field-input" id="t-dtype">
+            <option value="">Select...</option>
+            <option>Laptop</option><option>Desktop</option><option>Tablet</option>
+            <option>Smartphone</option><option>Printer</option><option>Monitor</option><option>Other</option>
+          </select>
+        </div>
+        <div class="field-group"><label class="field-label">Brand &amp; Model</label><input class="field-input" id="t-model" placeholder="e.g. MacBook Pro 2021"/></div>
+      </div>
+      <div class="field-group"><label class="field-label">Serial Number (serial_number)</label><input class="field-input" id="t-serial" placeholder="Optional"/></div>
+      <div class="fsec-label">Issue Details</div>
+      <div class="field-group"><label class="field-label">Reported Issue * (reported_issue)</label><textarea class="field-input" id="t-issue" rows="3" placeholder="Describe the problem..."></textarea></div>
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">Priority (priority)</label>
+          <select class="field-input" id="t-priority">
+            <option>Normal</option><option>Low</option><option>High</option><option>Urgent</option>
+          </select>
+        </div>
+        <div class="field-group"><label class="field-label">Estimated Cost ₱ (estimated_cost)</label><input class="field-input" type="number" id="t-cost" placeholder="0.00" min="0"/></div>
+      </div>
+      <div id="t-status-wrap" style="display:none">
+        <div class="fsec-label">Status Update</div>
+        <div class="form-row2">
+          <div class="field-group"><label class="field-label">ticket_status</label>
+            <select class="field-input" id="t-status">
+              <option>Received</option><option>In Progress</option><option>Awaiting Parts</option><option>Completed</option><option>Released</option>
+            </select>
+          </div>
+          <div class="field-group"><label class="field-label">Actual Cost ₱ (actual_cost)</label><input class="field-input" type="number" id="t-actual" placeholder="0.00" min="0"/></div>
+        </div>
+        <div class="field-group"><label class="field-label">Technician Notes</label><textarea class="field-input" id="t-notes" rows="2" placeholder="Add repair notes..."></textarea></div>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" id="tkt-submit-btn" onclick="saveTicket()">Update Ticket</button>
+    </div>
+  </div>
+
+  <!-- Ticket Detail Modal -->
+  <div class="modal modal-xl" id="modal-detail">
+    <div class="modal-head">
+      <h3 class="modal-title" id="detail-title">Ticket Detail</h3>
+      <button class="modal-x" onclick="closeModals()">✕</button>
+    </div>
+    <div class="modal-body" id="detail-body"></div>
+  </div>
+
+  <!-- Payment Modal -->
+  <div class="modal" id="modal-payment">
+    <div class="modal-head">
+      <h3 class="modal-title">Record Payment</h3>
+      <button class="modal-x" onclick="closeModals()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="field-group"><label class="field-label">Ticket</label><select class="field-input" id="p-ticket"><option value="">Select ticket...</option></select></div>
+      <div class="field-group"><label class="field-label">Amount ₱ *</label><input class="field-input" type="number" id="p-amount" placeholder="0.00" min="0"/></div>
+      <div class="field-group"><label class="field-label">Payment Method</label>
+        <select class="field-input" id="p-method">
+          <option>Cash</option><option>GCash</option><option>Maya</option><option>Bank Transfer</option><option>Credit Card</option>
+        </select>
+      </div>
+      <div class="field-group"><label class="field-label">Payment Status</label>
+        <select class="field-input" id="p-status"><option>Paid</option><option>Partial</option><option>Pending</option></select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="savePayment()">Record Payment</button>
+    </div>
+  </div>
+
+  <!-- User Modal -->
+  <div class="modal" id="modal-user">
+    <div class="modal-head">
+      <h3 class="modal-title">Add User (tbl_technician)</h3>
+      <button class="modal-x" onclick="closeModals()">✕</button>
+    </div>
+    <div class="modal-body">
+      <div class="form-row2">
+        <div class="field-group"><label class="field-label">First Name *</label><input class="field-input" id="u-fname" placeholder="First name"/></div>
+        <div class="field-group"><label class="field-label">Last Name *</label><input class="field-input" id="u-lname" placeholder="Last name"/></div>
+      </div>
+      <div class="field-group"><label class="field-label">Email *</label><input class="field-input" type="email" id="u-email" placeholder="user@repairshop.com"/></div>
+      <div class="field-group"><label class="field-label">Phone</label><input class="field-input" id="u-phone" placeholder="Optional"/></div>
+      <div class="field-group"><label class="field-label">Specialization</label><input class="field-input" id="u-spec" placeholder="e.g. Hardware, Software, Mobile"/></div>
+      <div class="field-group"><label class="field-label">Role *</label>
+        <select class="field-input" id="u-role">
+          <option value="admin">Admin</option>
+          <option value="reception">Receptionist</option>
+          <option value="technician">Technician</option>
+        </select>
+      </div>
+    </div>
+    <div class="modal-foot">
+      <button class="btn-ghost" onclick="closeModals()">Cancel</button>
+      <button class="btn-primary" onclick="saveUser()">Add User</button>
+    </div>
+  </div>
+
+  <div id="toast" class="toast"></div>
+</div>
+
+<script src="src/data/store.js"></script>
+<script src="src/components/app.js"></script>
+<script src="src/pages/dashboard.js"></script>
+<script src="src/pages/customers.js"></script>
+<script src="src/pages/tickets.js"></script>
+<script src="src/pages/history.js"></script>
+<script src="src/pages/payments.js"></script>
+<script src="src/pages/users.js"></script>
+<script src="src/pages/reports.js"></script>
+<script src="src/pages/customer-portal.js"></script>
+</body>
+</html>
